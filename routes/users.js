@@ -110,13 +110,14 @@ router.get('/bar', async function (ctx, next) {
 router.get('/shiwu',async (ctx)=>{
   //启用事务(自动提交)
   return sequelize.transaction(function (t) {
-      //创建记录成功后，并把它修改为‘李四’
+      //创建记录成功后，并把它修改为‘李四’,当休后出现错误时，就会回滚
     return User.create({
         userName: '黄晓明',
         age: 20
     }, {
             transaction: t
         }).then(result => {
+            //throw new Error();
             console.log(result)
             return User.update({
                 userName: '李四',
@@ -124,6 +125,7 @@ router.get('/shiwu',async (ctx)=>{
                     where: { id: result.id },
                     transaction: t  //注意（事务transaction 须和where同级）second parameter is "options", so transaction must be in it
                 })
+                
         })
 }).then(result => {
     // Transaction 会自动提交
