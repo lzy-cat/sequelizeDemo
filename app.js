@@ -5,6 +5,9 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const es = require('koa-elasticsearch')
+
+
 require('./sync')
 
 const index = require('./routes/index')
@@ -24,6 +27,8 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
+//elasticsearch中间件
+app.use(es())
 
 // logger
 app.use(async (ctx, next) => {
